@@ -7,12 +7,12 @@ public class News {
     public String title;
     public String content;
     public String date;
-    public String url;
+    public String link;
 
-    public News(String title, String content, String date, String url) {
+    public News(String title, String content, String date, String link) {
         this.title = title;
         this.content = content;
         this.date = date;
-        this.url = url;
+        this.link = link;
     }
 }

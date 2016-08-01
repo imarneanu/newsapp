@@ -47,13 +47,16 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         holder.mNewsDate.setText(news.date);
     }
 
-
     public NewsRecyclerAdapter(ArrayList<News> news) {
+        mNews = news;
+    }
+
+    public void setData(ArrayList<News> news) {
         mNews = news;
     }
 
     @Override
     public int getItemCount() {
-        return mNews.size();
+        return mNews == null ? 0 : mNews.size();
     }
 }
