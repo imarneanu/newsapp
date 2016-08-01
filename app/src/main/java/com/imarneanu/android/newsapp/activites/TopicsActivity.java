@@ -1,4 +1,6 @@
-package com.imarneanu.android.newsapp;
+package com.imarneanu.android.newsapp.activites;
+
+import com.imarneanu.android.newsapp.R;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
