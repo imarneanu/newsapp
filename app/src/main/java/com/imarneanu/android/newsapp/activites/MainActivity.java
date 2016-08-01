@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
-        newsTask.execute();
+        newsTask.execute(Constants.HEALTH_NEWS);
 
-        mRecyclerAdapter = new NewsRecyclerAdapter(mNews);
+        mRecyclerAdapter = new NewsRecyclerAdapter(this);
         recyclerView.setAdapter(mRecyclerAdapter);
 
         recyclerView.addOnItemTouchListener(new NewsRecyclerListener(this, this));
@@ -60,15 +60,15 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         startActivity(intent);
     }
 
-    private class FetchReutersNewsTask extends AsyncTask<Void, Void, ArrayList<News>> {
+    private class FetchReutersNewsTask extends AsyncTask<String, Void, ArrayList<News>> {
 
         @Override
-        protected ArrayList<News> doInBackground(Void... voids) {
+        protected ArrayList<News> doInBackground(String... params) {
             HttpURLConnection urlConnection;
             BufferedReader reader;
 
             try {
-                URL url = new URL(Constants.BASE_URL + Constants.WORLD_NEWS);
+                URL url = new URL(Constants.BASE_URL + params[0]);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
             final String CONTENT = "contentSnippet";
             final String DATE = "publishedDate";
             final String LINK = "link";
+            final String CATEGORIES = "categories";
 
             try {
                 JSONObject responseJson = new JSONObject(jsonString).getJSONObject(RESPONSE_DATA);
@@ -132,7 +133,10 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
                     String date = newsData.getString(DATE);
                     String link = newsData.getString(LINK);
 
-                    news.add(i, new News(title, content, date, link));
+                    JSONArray categoriesArray = newsData.getJSONArray(CATEGORIES);
+                    String category = categoriesArray.getString(0);
+
+                    news.add(i, new News(title, content, date, link, Enum.valueOf(News.Category.class, category)));
                 }
                 return news;
             } catch (JSONException e) {

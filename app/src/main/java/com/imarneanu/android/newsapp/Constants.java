@@ -8,7 +8,7 @@ public class Constants {
     public static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=";
     public static final String ARTS_NEWS = "http://feeds.reuters.com/news/artsculture";
     public static final String BUSINESS_NEWS = "http://feeds.reuters.com/reuters/businessNews";
-    public static final String ENTERTAINMENT_NEWS = "http://feeds.reuters.com/reuters/entertainment";
+    public static final String ENTERTAINMENT_NEWS = "http://feeds.reuters.com/reuters/entertainmentNews";
     public static final String ENVIRONMENT_NEWS = "http://feeds.reuters.com/reuters/environment";
     public static final String HEALTH_NEWS = "http://feeds.reuters.com/reuters/healthNews";
     public static final String LIFESTYLE_NEWS = "http://feeds.reuters.com/reuters/lifestyle";
