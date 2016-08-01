@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
-        newsTask.execute(Constants.HEALTH_NEWS);
+        newsTask.execute(Constants.HEALTH_NEWS, Constants.ARTS_NEWS, Constants.LIFESTYLE_NEWS);
 
         mRecyclerAdapter = new NewsRecyclerAdapter(this);
         recyclerView.setAdapter(mRecyclerAdapter);
@@ -64,32 +64,38 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
 
         @Override
         protected ArrayList<News> doInBackground(String... params) {
+            ArrayList<News> news = new ArrayList<>(4 * params.length);
+
             HttpURLConnection urlConnection;
             BufferedReader reader;
 
             try {
-                URL url = new URL(Constants.BASE_URL + params[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
+                for (String param : params) {
+                    URL url = new URL(Constants.BASE_URL + param);
+                    urlConnection = (HttpURLConnection) url.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.connect();
 
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuilder buffer = new StringBuilder();
+                    InputStream inputStream = urlConnection.getInputStream();
+                    StringBuilder buffer = new StringBuilder();
 
-                if (inputStream == null) {
-                    return null;
+                    if (inputStream == null) {
+                        return null;
+                    }
+                    reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line).append("\n");
+                    }
+
+                    if (buffer.length() == 0) {
+                        return null;
+                    }
+                    news.addAll(getNewsDataFromJson(buffer.toString()));
                 }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line).append("\n");
-                }
-
-                if (buffer.length() == 0) {
-                    return null;
-                }
-                return getNewsDataFromJson(buffer.toString());
+                return news;
             } catch (IOException e) {
                 e.printStackTrace();
             }
