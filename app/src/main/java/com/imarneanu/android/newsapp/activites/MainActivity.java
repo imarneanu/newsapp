@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
 
     private ArrayList<News> mNews;
     private LinearLayout mHeaderProgress;
+    private TextView mEmptyView;
     private NewsRecyclerAdapter mRecyclerAdapter;
 
     @Override
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         setContentView(R.layout.activity_main);
 
         mHeaderProgress = (LinearLayout) findViewById(R.id.headerProgress);
+        mEmptyView = (TextView) findViewById(R.id.emptyView);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -164,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
                 mRecyclerAdapter.notifyDataSetChanged();
             }
 
+            mEmptyView.setVisibility(news == null ? View.VISIBLE : View.GONE);
             mHeaderProgress.setVisibility(View.GONE);
         }
 
