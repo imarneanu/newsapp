@@ -1,12 +1,17 @@
 package com.imarneanu.android.newsapp.data;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
  * Created by imarneanu on 7/29/16.
  */
-public class News {
+public class News implements Comparable<News> {
     public String title;
     public String content;
     public String date;
@@ -14,7 +19,6 @@ public class News {
 
     public Category category;
 
-    @SuppressWarnings("unused")
     public enum Category {
         artsNews("artsNews.png", "http://feeds.reuters.com/news/artsculture"),
         businessNews("businessNews.png", "http://feeds.reuters.com/reuters/businessNews"),
@@ -47,6 +51,9 @@ public class News {
             return value;
         }
 
+        /*
+         * method used to get all category links
+         */
         public static Set<String> links() {
             Category[] categories = values();
             Set<String> links = new HashSet<>(categories.length);
@@ -65,5 +72,29 @@ public class News {
         this.date = date;
         this.link = link;
         this.category = category;
+    }
+
+    @Override
+    public int compareTo(News news) {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(news.date));
+            Date comparedDate = cal.getTime();
+            cal.setTime(sdf.parse(date));
+            Date comparableDate = cal.getTime();
+
+            // sort news to show from newest to oldest news - no matter the category
+            if (comparedDate.after(comparableDate)) {
+                return 1;
+            } else if (comparedDate.before(comparableDate)) {
+                return -1;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 }

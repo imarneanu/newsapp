@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements NewsRecyclerListener.OnItemClickListener {
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         @SafeVarargs
         @Override
         protected final ArrayList<News> doInBackground(Set<String>... params) {
+            // each news category returns exactly 4 entries
             ArrayList<News> news = new ArrayList<>(4 * params[0].size());
 
             HttpURLConnection urlConnection;
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
                     if (data != null) {
                         news.addAll(data);
                     }
+                    Collections.sort(news);
                 }
 
                 return news;
