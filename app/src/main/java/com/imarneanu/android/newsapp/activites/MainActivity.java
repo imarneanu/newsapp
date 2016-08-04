@@ -20,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
     private static final String SPORTS_NEWS = "http://feeds.reuters.com/reuters/sportsNews";
 
     private ArrayList<News> mNews;
+    private LinearLayout mHeaderProgress;
     private NewsRecyclerAdapter mRecyclerAdapter;
 
     @Override
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         if (categories == null) {
             categories = News.Category.links();
         }
+
+        mHeaderProgress = (LinearLayout) findViewById(R.id.headerProgress);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -74,6 +78,11 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
     }
 
     private class FetchReutersNewsTask extends AsyncTask<Set<String>, Void, ArrayList<News>> {
+
+        @Override
+        protected void onPreExecute() {
+            mHeaderProgress.setVisibility(View.VISIBLE);
+        }
 
         @SafeVarargs
         @Override
@@ -127,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
                 mRecyclerAdapter.setData(mNews);
                 mRecyclerAdapter.notifyDataSetChanged();
             }
+
+            mHeaderProgress.setVisibility(View.GONE);
         }
 
         private ArrayList<News> getNewsDataFromJson(String jsonString) {
