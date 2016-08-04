@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
             newsTask.execute(getCategories());
             mEmptyView.setVisibility(View.GONE);
         } else {
-            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+            Snackbar.make(mEmptyView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             mEmptyView.setText(getString(R.string.no_news_loaded));
             mEmptyView.setVisibility(View.VISIBLE);
         }
