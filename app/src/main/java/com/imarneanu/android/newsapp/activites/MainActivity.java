@@ -45,17 +45,16 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadNews();
-
         mHeaderProgress = (LinearLayout) findViewById(R.id.headerProgress);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnItemTouchListener(new NewsRecyclerListener(this, this));
 
         mRecyclerAdapter = new NewsRecyclerAdapter(this);
         recyclerView.setAdapter(mRecyclerAdapter);
 
-        recyclerView.addOnItemTouchListener(new NewsRecyclerListener(this, this));
+        loadNews();
     }
 
     @Override
