@@ -1,30 +1,6 @@
 <resources>
     <string name="app_name">NewsApp</string>
-
-    <string name="topics_header">What are you interested in?</string>
-    <string name="topics_subheading">Pick whatever catches your eye. You can always change topics from Settings later.</string>
-
-    <string name="topic_arts">Arts</string>
-    <string name="topic_business">Business</string>
-    <string name="topic_entertainment">Entertainment</string>
-    <string name="topic_environment">Environment</string>
-    <string name="topic_health">Health</string>
-    <string name="topic_lifestyle">Lifestyle</string>
-    <string name="topic_media">Media</string>
-    <string name="topic_most_read">Most Read</string>
-    <string name="topic_oddly_enough">Oddly Enough</string>
-    <string name="topic_pictures">Pictures</string>
-    <string name="topic_people">People</string>
-    <string name="topic_politics">Politics</string>
-    <string name="topic_science">Science</string>
-    <string name="topic_sports">Sports</string>
-    <string name="topic_technology">Technology</string>
-    <string name="topic_top_news">Top News</string>
-    <string name="topic_us_news">US News</string>
-    <string name="topic_world">World</string>
-
     <string name="action_refresh">Refresh</string>
-
 
     <string name="no_news">No news found for the selected categories.</string>
     <string name="no_news_loaded">No news could be loaded.\nPlease reconnect to internet.</string>

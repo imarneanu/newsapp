@@ -1,6 +1,5 @@
-package com.imarneanu.android.newsapp.activites;
+package com.imarneanu.android.newsapp;
 
-import com.imarneanu.android.newsapp.R;
 import com.imarneanu.android.newsapp.adapters.NewsRecyclerAdapter;
 import com.imarneanu.android.newsapp.adapters.NewsRecyclerListener;
 import com.imarneanu.android.newsapp.data.News;
@@ -8,11 +7,9 @@ import com.imarneanu.android.newsapp.utils.JsonParserUtils;
 import com.imarneanu.android.newsapp.utils.NetworkUtils;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +32,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity implements NewsRecyclerListener.OnItemClickListener {
 
     private static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=";
-    private static final String SPORTS_NEWS = "http://feeds.reuters.com/reuters/sportsNews";
 
     private ArrayList<News> mNews;
     private LinearLayout mHeaderProgress;
@@ -89,25 +85,13 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
     private void loadNews() {
         if (NetworkUtils.isNetworkAvailable(this)) {
             FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
-            newsTask.execute(getCategories());
+            newsTask.execute(News.Category.links());
             mEmptyView.setVisibility(View.GONE);
         } else {
             Snackbar.make(mEmptyView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
             mEmptyView.setText(getString(R.string.no_news_loaded));
             mEmptyView.setVisibility(View.VISIBLE);
         }
-    }
-
-    private Set<String> getCategories() {
-        String keyCategories = "pref_categories";
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<String> categories = preferences.getStringSet(keyCategories, null);
-
-        if (categories == null) {
-            categories = News.Category.links();
-        }
-
-        return categories;
     }
 
     private class FetchReutersNewsTask extends AsyncTask<Set<String>, Void, ArrayList<News>> {
