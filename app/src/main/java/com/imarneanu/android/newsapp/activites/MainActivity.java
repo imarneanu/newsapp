@@ -90,8 +90,11 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         if (NetworkUtils.isNetworkAvailable(this)) {
             FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
             newsTask.execute(getCategories());
+            mEmptyView.setVisibility(View.GONE);
         } else {
             Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+            mEmptyView.setText(getString(R.string.no_news_loaded));
+            mEmptyView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -165,9 +168,10 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
                 mNews = news;
                 mRecyclerAdapter.setData(mNews);
                 mRecyclerAdapter.notifyDataSetChanged();
+            } else {
+                mEmptyView.setText(getString(R.string.no_news));
+                mEmptyView.setVisibility(View.VISIBLE);
             }
-
-            mEmptyView.setVisibility(news == null ? View.VISIBLE : View.GONE);
             mHeaderProgress.setVisibility(View.GONE);
         }
 
