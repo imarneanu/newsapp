@@ -4,10 +4,7 @@ import com.imarneanu.android.newsapp.R;
 import com.imarneanu.android.newsapp.adapters.NewsRecyclerAdapter;
 import com.imarneanu.android.newsapp.adapters.NewsRecyclerListener;
 import com.imarneanu.android.newsapp.data.News;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.imarneanu.android.newsapp.utils.JsonParserUtils;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +15,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -32,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements NewsRecyclerListener.OnItemClickListener {
-
-    private final String TAG = MainActivity.class.getSimpleName();
 
     private static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=";
     private static final String SPORTS_NEWS = "http://feeds.reuters.com/reuters/sportsNews";
@@ -115,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
                     if (buffer.length() == 0) {
                         return null;
                     }
-                    ArrayList<News> data = getNewsDataFromJson(buffer.toString());
+                    ArrayList<News> data = JsonParserUtils.getNewsDataFromJson(buffer.toString());
                     if (data != null) {
                         news.addAll(data);
                     }
@@ -138,51 +132,6 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
             }
 
             mHeaderProgress.setVisibility(View.GONE);
-        }
-
-        private ArrayList<News> getNewsDataFromJson(String jsonString) {
-            // These are the names of the JSON objects that need to be extracted.
-            final String RESPONSE_DATA = "responseData";
-            final String RESPONSE_STATUS = "responseStatus";
-            final String FEED = "feed";
-            final String ENTRIES = "entries";
-            final String TITLE = "title";
-            final String CONTENT = "contentSnippet";
-            final String DATE = "publishedDate";
-            final String LINK = "link";
-            final String CATEGORIES = "categories";
-
-            try {
-                JSONObject data = new JSONObject(jsonString);
-                int responseStatus = data.getInt(RESPONSE_STATUS);
-                if (responseStatus != 200) {
-                    return null;
-                }
-                JSONObject responseJson = data.getJSONObject(RESPONSE_DATA);
-                JSONObject feedJson = responseJson.getJSONObject(FEED);
-                JSONArray entriesArray = feedJson.getJSONArray(ENTRIES);
-
-                ArrayList<News> news = new ArrayList<>(entriesArray.length());
-
-                for (int i = 0; i < entriesArray.length(); i++) {
-                    // Get the JSON object representing the news
-                    JSONObject newsData = entriesArray.getJSONObject(i);
-
-                    String title = newsData.getString(TITLE);
-                    String content = newsData.getString(CONTENT);
-                    String date = newsData.getString(DATE);
-                    String link = newsData.getString(LINK);
-
-                    JSONArray categoriesArray = newsData.getJSONArray(CATEGORIES);
-                    String category = categoriesArray.getString(0);
-
-                    news.add(i, new News(title, content, date, link, Enum.valueOf(News.Category.class, category)));
-                }
-                return news;
-            } catch (JSONException e) {
-                Log.e(TAG, e.getMessage(), e);
-            }
-            return null;
         }
 
     }
