@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/news_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:layout_margin="@dimen/card_margin"
+    android:elevation="@dimen/card_elevation">
 
-    <TextView
-        android:id="@+id/news_title"
-        style="@style/TitleStyle"
+    <LinearLayout
+        android:id="@+id/news_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Title" />
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
-    <TextView
-        android:id="@+id/news_content"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Content" />
+        <TextView
+            android:id="@+id/news_title"
+            style="@style/TitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Title" />
 
-    <TextView
-        android:id="@+id/news_date"
-        style="@style/CaptionStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end|bottom"
-        tools:text="Mon, 25 Jul 2016 03:47:29 -0700" />
+        <TextView
+            android:id="@+id/news_content"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:text="Content" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/news_date"
+            style="@style/CaptionStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            tools:text="Mon, 25 Jul 2016 03:47:29 -0700" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

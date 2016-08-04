@@ -10,12 +10,17 @@
 
     <style name="TitleStyle" parent="android:TextAppearance.Large">
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:maxLines">2</item>
     </style>
 
     <style name="TextStyle" parent="android:TextAppearance.Medium">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:maxLines">4</item>
     </style>
 
     <style name="CaptionStyle" parent="android:TextAppearance.Small">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>
