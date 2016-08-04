@@ -15,6 +15,8 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -41,21 +43,13 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String keyCategories = "pref_categories";
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Set<String> categories = preferences.getStringSet(keyCategories, null);
-
-        if (categories == null) {
-            categories = News.Category.links();
-        }
-
         mHeaderProgress = (LinearLayout) findViewById(R.id.headerProgress);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
-        newsTask.execute(categories);
+        newsTask.execute(getCategories());
 
         mRecyclerAdapter = new NewsRecyclerAdapter(this);
         recyclerView.setAdapter(mRecyclerAdapter);
@@ -64,11 +58,42 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_refresh) {
+            FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
+            newsTask.execute(getCategories());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onItemClick(View view, int position) {
         String url = mNews.get(position).link;
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    private Set<String> getCategories() {
+        String keyCategories = "pref_categories";
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Set<String> categories = preferences.getStringSet(keyCategories, null);
+
+        if (categories == null) {
+            categories = News.Category.links();
+        }
+
+        return categories;
     }
 
     private class FetchReutersNewsTask extends AsyncTask<Set<String>, Void, ArrayList<News>> {

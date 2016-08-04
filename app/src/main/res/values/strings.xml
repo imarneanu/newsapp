@@ -23,22 +23,5 @@
     <string name="topic_us_news">US News</string>
     <string name="topic_world">World</string>
 
-    <string name="topic_arts_feed_url">http://feeds.reuters.com/news/artsculture</string>
-    <string name="topic_business_feed_url">http://feeds.reuters.com/reuters/businessNews</string>
-    <string name="topic_entertainment_feed_url">http://feeds.reuters.com/reuters/entertainment</string>
-    <string name="topic_environment_feed_url">http://feeds.reuters.com/reuters/environment</string>
-    <string name="topic_health_feed_url">http://feeds.reuters.com/reuters/environment</string>
-    <string name="topic_lifestyle_feed_url">http://feeds.reuters.com/reuters/lifestyle</string>
-    <string name="topic_media_feed_url">http://feeds.reuters.com/news/reutersmedia</string>
-    <string name="topic_most_read_feed_url">http://feeds.reuters.com/reuters/MostRead</string>
-    <string name="topic_oddly_enough_feed_url">http://feeds.reuters.com/reuters/oddlyEnoughNews</string>
-    <string name="topic_pictures_feed_url">http://feeds.reuters.com/ReutersPictures</string>
-    <string name="topic_people_feed_url">http://feeds.reuters.com/reuters/peopleNews</string>
-    <string name="topic_politics_feed_url">http://feeds.reuters.com/Reuters/PoliticsNews</string>
-    <string name="topic_science_feed_url">http://feeds.reuters.com/reuters/scienceNews</string>
-    <string name="topic_sports_feed_url">http://feeds.reuters.com/reuters/sportsNews</string>
-    <string name="topic_technology_feed_url">http://feeds.reuters.com/reuters/technologyNews</string>
-    <string name="topic_top_news_feed_url">http://feeds.reuters.com/reuters/topNews</string>
-    <string name="topic_us_news_feed_url">http://feeds.reuters.com/Reuters/domesticNews</string>
-    <string name="topic_world_feed_url">http://feeds.reuters.com/Reuters/worldNews</string>
+    <string name="action_refresh">Refresh</string>
 </resources>
