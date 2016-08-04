@@ -24,4 +24,7 @@
     <string name="topic_world">World</string>
 
     <string name="action_refresh">Refresh</string>
+
+    <string name="no_internet">No internet connection</string>
+
 </resources>

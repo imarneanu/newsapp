@@ -5,6 +5,7 @@ import com.imarneanu.android.newsapp.adapters.NewsRecyclerAdapter;
 import com.imarneanu.android.newsapp.adapters.NewsRecyclerListener;
 import com.imarneanu.android.newsapp.data.News;
 import com.imarneanu.android.newsapp.utils.JsonParserUtils;
+import com.imarneanu.android.newsapp.utils.NetworkUtils;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,13 +45,12 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadNews();
+
         mHeaderProgress = (LinearLayout) findViewById(R.id.headerProgress);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
-        newsTask.execute(getCategories());
 
         mRecyclerAdapter = new NewsRecyclerAdapter(this);
         recyclerView.setAdapter(mRecyclerAdapter);
@@ -68,8 +69,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         int id = item.getItemId();
 
         if (id == R.id.action_refresh) {
-            FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
-            newsTask.execute(getCategories());
+            loadNews();
             return true;
         }
 
@@ -82,6 +82,15 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    private void loadNews() {
+        if (NetworkUtils.isNetworkAvailable(this)) {
+            FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
+            newsTask.execute(getCategories());
+        } else {
+            Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+        }
     }
 
     private Set<String> getCategories() {
