@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,12 +28,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements NewsRecyclerListener.OnItemClickListener {
 
-    private static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=";
+    private static final String GUARDIAN_URL = "http://content.guardianapis.com/search?api-key=ff7a822c-f0c3-4f36-8ad5-d62fb2258413";
 
     private ArrayList<News> mNews;
     private LinearLayout mHeaderProgress;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
 
     @Override
     public void onItemClick(View view, int position) {
-        String url = mNews.get(position).link;
+        String url = mNews.get(position).webUrl;
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
     private void loadNews() {
         if (NetworkUtils.isNetworkAvailable(this)) {
             FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
-            newsTask.execute(News.Category.links());
+            newsTask.execute();
             mEmptyView.setVisibility(View.GONE);
         } else {
             Snackbar.make(mEmptyView, getString(R.string.no_internet), Snackbar.LENGTH_LONG).show();
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         }
     }
 
-    private class FetchReutersNewsTask extends AsyncTask<Set<String>, Void, ArrayList<News>> {
+    private class FetchReutersNewsTask extends AsyncTask<Void, Void, ArrayList<News>> {
 
         @Override
         protected void onPreExecute() {
@@ -104,46 +103,32 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
 
         @SafeVarargs
         @Override
-        protected final ArrayList<News> doInBackground(Set<String>... params) {
-            // each news category returns exactly 4 entries
-            ArrayList<News> news = new ArrayList<>(4 * params[0].size());
-
-            HttpURLConnection urlConnection;
-            BufferedReader reader;
-
+        protected final ArrayList<News> doInBackground(Void... voids) {
             try {
-                for (String param : params[0]) {
-                    URL url = new URL(BASE_URL + param);
-                    urlConnection = (HttpURLConnection) url.openConnection();
-                    urlConnection.setRequestMethod("GET");
-                    urlConnection.connect();
+                URL url = new URL(GUARDIAN_URL);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
 
-                    InputStream inputStream = urlConnection.getInputStream();
-                    StringBuilder buffer = new StringBuilder();
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuilder buffer = new StringBuilder();
 
-                    if (inputStream == null) {
-                        return null;
-                    }
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
+                if (inputStream == null) {
+                    return null;
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        buffer.append(line).append("\n");
-                    }
-
-                    if (buffer.length() == 0) {
-                        return null;
-                    }
-                    ArrayList<News> data = JsonParserUtils.getNewsDataFromJson(buffer.toString());
-                    if (data != null) {
-                        news.addAll(data);
-                    }
-                    Collections.sort(news);
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line).append("\n");
                 }
 
-                return news;
+                if (buffer.length() == 0) {
+                    return null;
+                }
+                return JsonParserUtils.getNewsDataFromJson(buffer.toString());
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(MainActivity.class.getSimpleName(), e.getMessage(), e);
             }
 
             return null;

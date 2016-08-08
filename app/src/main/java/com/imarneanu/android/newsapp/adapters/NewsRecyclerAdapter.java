@@ -28,16 +28,16 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout mNewsContainer;
+        public TextView mNewsSection;
         public TextView mNewsTitle;
-        public TextView mNewsContent;
         public TextView mNewsDate;
 
         public ViewHolder(View view) {
             super(view);
 
             mNewsContainer = (LinearLayout) view.findViewById(R.id.news_container);
+            mNewsSection = (TextView) view.findViewById(R.id.news_section);
             mNewsTitle = (TextView) view.findViewById(R.id.news_title);
-            mNewsContent = (TextView) view.findViewById(R.id.news_content);
             mNewsDate = (TextView) view.findViewById(R.id.news_date);
         }
     }
@@ -52,15 +52,26 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         News news = mNews.get(position);
+        Drawable backgroundDrawable = null;
 
         try {
-            holder.mNewsContainer.setBackground(Drawable.createFromStream(mContext.getAssets().open(news.category.toString()), null));
+            backgroundDrawable = Drawable.createFromStream(mContext.getAssets().open(news.getCategoryImage()), null);
+            holder.mNewsContainer.setBackground(backgroundDrawable);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
-        holder.mNewsTitle.setText(news.title);
-        holder.mNewsContent.setText(news.content);
-        holder.mNewsDate.setText(news.date);
+
+        if (backgroundDrawable == null) {
+            try {
+                holder.mNewsContainer.setBackground(Drawable.createFromStream(mContext.getAssets().open("news.png"), null));
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
+        }
+
+        holder.mNewsSection.setText(news.sectionName);
+        holder.mNewsTitle.setText(news.webTitle);
+        holder.mNewsDate.setText(news.webPublicationDate);
     }
 
     public NewsRecyclerAdapter(Context context) {

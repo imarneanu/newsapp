@@ -17,41 +17,36 @@ public class JsonParserUtils {
 
     public static ArrayList<News> getNewsDataFromJson(String jsonString) {
         // These are the names of the JSON objects that need to be extracted.
-        final String RESPONSE_DATA = "responseData";
-        final String RESPONSE_STATUS = "responseStatus";
-        final String FEED = "feed";
-        final String ENTRIES = "entries";
-        final String TITLE = "title";
-        final String CONTENT = "contentSnippet";
-        final String DATE = "publishedDate";
-        final String LINK = "link";
-        final String CATEGORIES = "categories";
+        final String RESPONSE_DATA = "response";
+        final String RESPONSE_STATUS = "status";
+        final String RESULTS = "results";
+        final String SECTION_ID = "sectionId";
+        final String SECTION_NAME = "sectionName";
+        final String WEB_PUBLICATION_DATE = "webPublicationDate";
+        final String WEB_TITLE = "webTitle";
+        final String WEB_URL = "webUrl";
 
         try {
-            JSONObject data = new JSONObject(jsonString);
-            int responseStatus = data.getInt(RESPONSE_STATUS);
-            if (responseStatus != 200) {
+            JSONObject data = new JSONObject(jsonString).getJSONObject(RESPONSE_DATA);
+            String responseStatus = data.getString(RESPONSE_STATUS);
+            if (responseStatus.compareTo("ok") != 0) {
                 return null;
             }
-            JSONObject responseJson = data.getJSONObject(RESPONSE_DATA);
-            JSONObject feedJson = responseJson.getJSONObject(FEED);
-            JSONArray entriesArray = feedJson.getJSONArray(ENTRIES);
+            JSONArray resultsArray = data.getJSONArray(RESULTS);
 
-            ArrayList<News> news = new ArrayList<>(entriesArray.length());
+            ArrayList<News> news = new ArrayList<>(resultsArray.length());
 
-            for (int i = 0; i < entriesArray.length(); i++) {
+            for (int i = 0; i < resultsArray.length(); i++) {
                 // Get the JSON object representing the news
-                JSONObject newsData = entriesArray.getJSONObject(i);
+                JSONObject newsData = resultsArray.getJSONObject(i);
 
-                String title = newsData.getString(TITLE);
-                String content = newsData.getString(CONTENT);
-                String date = newsData.getString(DATE);
-                String link = newsData.getString(LINK);
+                String sectionId = newsData.getString(SECTION_ID);
+                String sectionName = newsData.getString(SECTION_NAME);
+                String webPublicationDate = newsData.getString(WEB_PUBLICATION_DATE);
+                String webTitle = newsData.getString(WEB_TITLE);
+                String webUrl = newsData.getString(WEB_URL);
 
-                JSONArray categoriesArray = newsData.getJSONArray(CATEGORIES);
-                String category = categoriesArray.getString(0);
-
-                news.add(i, new News(title, content, date, link, Enum.valueOf(News.Category.class, category)));
+                news.add(i, new News(sectionId, sectionName, webPublicationDate, webTitle, webUrl));
             }
             return news;
         } catch (JSONException e) {
