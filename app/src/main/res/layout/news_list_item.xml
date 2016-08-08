@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/news_section"
-            style="@style/TextStyle"
+            style="@style/SectionStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Section Name" />

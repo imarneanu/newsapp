@@ -56,19 +56,22 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
 
         try {
             backgroundDrawable = Drawable.createFromStream(mContext.getAssets().open(news.getCategoryImage()), null);
-            holder.mNewsContainer.setBackground(backgroundDrawable);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
 
         if (backgroundDrawable == null) {
             try {
-                holder.mNewsContainer.setBackground(Drawable.createFromStream(mContext.getAssets().open("news.png"), null));
+                backgroundDrawable = Drawable.createFromStream(mContext.getAssets().open("news.png"), null);
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage(), e);
             }
         }
 
+        if (backgroundDrawable != null) {
+            backgroundDrawable.setAlpha(92);
+            holder.mNewsContainer.setBackground(backgroundDrawable);
+        }
         holder.mNewsSection.setText(news.sectionName);
         holder.mNewsTitle.setText(news.webTitle);
         holder.mNewsDate.setText(news.webPublicationDate);
