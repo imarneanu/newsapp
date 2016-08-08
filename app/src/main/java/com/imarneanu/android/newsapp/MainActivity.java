@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
 
     private void loadNews() {
         if (NetworkUtils.isNetworkAvailable(this)) {
-            FetchReutersNewsTask newsTask = new FetchReutersNewsTask();
+            FetchGuardianNewsTask newsTask = new FetchGuardianNewsTask();
             newsTask.execute();
             mEmptyView.setVisibility(View.GONE);
         } else {
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements NewsRecyclerListe
         }
     }
 
-    private class FetchReutersNewsTask extends AsyncTask<Void, Void, ArrayList<News>> {
+    private class FetchGuardianNewsTask extends AsyncTask<Void, Void, ArrayList<News>> {
 
         @Override
         protected void onPreExecute() {
