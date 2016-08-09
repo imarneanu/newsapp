@@ -55,14 +55,16 @@ public class NewsRecyclerAdapter extends RecyclerView.Adapter<NewsRecyclerAdapte
         Drawable backgroundDrawable = null;
 
         try {
-            backgroundDrawable = Drawable.createFromStream(mContext.getAssets().open(news.getCategoryImage()), null);
+            backgroundDrawable = Drawable.createFromStream(mContext.getAssets()
+                    .open(news.getCategoryImage()), null);
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
         }
 
         if (backgroundDrawable == null) {
             try {
-                backgroundDrawable = Drawable.createFromStream(mContext.getAssets().open("news.png"), null);
+                backgroundDrawable = Drawable.createFromStream(mContext.getAssets()
+                        .open("news.png"), null);
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage(), e);
             }
