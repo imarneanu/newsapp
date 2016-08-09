@@ -31,7 +31,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NewsRecyclerListener.OnItemClickListener {
 
-    private static final String GUARDIAN_URL = "http://content.guardianapis.com/search?api-key=ff7a822c-f0c3-4f36-8ad5-d62fb2258413";
+    private static final String GUARDIAN_URL = "http://content.guardianapis.com/search?api-key="
+            + BuildConfig.GUARDIAN_API_KEY;
 
     private ArrayList<News> mNews;
     private LinearLayout mHeaderProgress;
